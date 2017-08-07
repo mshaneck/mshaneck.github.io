@@ -1,0 +1,15 @@
+
+{% comment %} 
+ Taken from https://eduardoboucas.com/blog/2014/12/07/including-and-managing-images-in-jekyll.html
+{% endcomment %}
+<div>
+{% capture imagePath %}{{ page.name }}/{{ include.name }}{% endcapture %}
+{% if include.caption %}
+    <figure>
+        <img src="/assets/posts/{{ imagePath }}" {% if include.alt %} alt="{{ include.alt }}" {% endif %} {% if include.width %} width="{{ include.width }}" {% endif %}/>
+        <figcaption>{{ include.caption }}</figcaption>
+    </figure>
+{% else %}
+    <img src="/assets/posts/{{ imagePath }}" {% if include.alt %} alt="{{ include.alt }}" {% endif %} {% if include.width %} width="{{ include.width }}" {% endif %}/>
+{% endif %}
+</div>

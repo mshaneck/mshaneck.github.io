@@ -9,7 +9,7 @@ tags: ctf sha2017
 ------
 The challenge starts with a link to a webpage for a restaurant. 
 
-{% include image name="bon1.png" %}
+{% include image name="bon1-smaller.png" %}
 
 First thing to do is view the source. One thing that is immediately apparent is the comment near the top of the page:
 

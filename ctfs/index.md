@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: page
 title: CTF Solution Writeups
 category: ctf 
 tags: ctf

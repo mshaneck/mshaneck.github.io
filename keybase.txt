@@ -1,0 +1,55 @@
+==================================================================
+https://keybase.io/shaneck
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of http://markshaneck.com
+  * I am shaneck (https://keybase.io/shaneck) on keybase.
+  * I have a public key ASDwdJoXDRYtdvb_Je919E5EIb0SNEZI0fGbfHlavF5LMwo
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "0101a25b237ae7dd5f1e38d9ab247ae6d1eb594f75a7969b846caccfc6b16e08d88d0a",
+      "host": "keybase.io",
+      "kid": "0120f0749a170d162d76f6ff25ef75f44e4421bd12344648d1f19b7c795abc5e4b330a",
+      "uid": "edb0ecbbfa83b0cf44038c87d9858c00",
+      "username": "shaneck"
+    },
+    "merkle_root": {
+      "ctime": 1502425926,
+      "hash": "7f655402a5c1285e2f65fac50b6b3946a1e61a6a4921d2d2dfd80165e58110d36a50a1e6fc13cee4281c7a2a1bffd753f3f544b568aac78a6cff36def936ded3",
+      "hash_meta": "63b9a3c3dab1c8cdd192cf91e4676c1867bb7aaaa5531c9b631404e1bdafa9ef",
+      "seqno": 1319104
+    },
+    "service": {
+      "hostname": "markshaneck.com",
+      "protocol": "http:"
+    },
+    "type": "web_service_binding",
+    "version": 1
+  },
+  "client": {
+    "name": "keybase.io go client",
+    "version": "1.0.27"
+  },
+  "ctime": 1502425947,
+  "expire_in": 504576000,
+  "prev": "901d560393c2f73b20e9971427fc1731ce9d70089a24999dda1b220e69aee7e0",
+  "seqno": 53,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEg8HSaFw0WLXb2/yXvdfRORCG9EjRGSNHxm3x5WrxeSzMKp3BheWxvYWTFA0Z7ImJvZHkiOnsia2V5Ijp7ImVsZGVzdF9raWQiOiIwMTAxYTI1YjIzN2FlN2RkNWYxZTM4ZDlhYjI0N2FlNmQxZWI1OTRmNzVhNzk2OWI4NDZjYWNjZmM2YjE2ZTA4ZDg4ZDBhIiwiaG9zdCI6ImtleWJhc2UuaW8iLCJraWQiOiIwMTIwZjA3NDlhMTcwZDE2MmQ3NmY2ZmYyNWVmNzVmNDRlNDQyMWJkMTIzNDQ2NDhkMWYxOWI3Yzc5NWFiYzVlNGIzMzBhIiwidWlkIjoiZWRiMGVjYmJmYTgzYjBjZjQ0MDM4Yzg3ZDk4NThjMDAiLCJ1c2VybmFtZSI6InNoYW5lY2sifSwibWVya2xlX3Jvb3QiOnsiY3RpbWUiOjE1MDI0MjU5MjYsImhhc2giOiI3ZjY1NTQwMmE1YzEyODVlMmY2NWZhYzUwYjZiMzk0NmExZTYxYTZhNDkyMWQyZDJkZmQ4MDE2NWU1ODExMGQzNmE1MGExZTZmYzEzY2VlNDI4MWM3YTJhMWJmZmQ3NTNmM2Y1NDRiNTY4YWFjNzhhNmNmZjM2ZGVmOTM2ZGVkMyIsImhhc2hfbWV0YSI6IjYzYjlhM2MzZGFiMWM4Y2RkMTkyY2Y5MWU0Njc2YzE4NjdiYjdhYWFhNTUzMWM5YjYzMTQwNGUxYmRhZmE5ZWYiLCJzZXFubyI6MTMxOTEwNH0sInNlcnZpY2UiOnsiaG9zdG5hbWUiOiJtYXJrc2hhbmVjay5jb20iLCJwcm90b2NvbCI6Imh0dHA6In0sInR5cGUiOiJ3ZWJfc2VydmljZV9iaW5kaW5nIiwidmVyc2lvbiI6MX0sImNsaWVudCI6eyJuYW1lIjoia2V5YmFzZS5pbyBnbyBjbGllbnQiLCJ2ZXJzaW9uIjoiMS4wLjI3In0sImN0aW1lIjoxNTAyNDI1OTQ3LCJleHBpcmVfaW4iOjUwNDU3NjAwMCwicHJldiI6IjkwMWQ1NjAzOTNjMmY3M2IyMGU5OTcxNDI3ZmMxNzMxY2U5ZDcwMDg5YTI0OTk5ZGRhMWIyMjBlNjlhZWU3ZTAiLCJzZXFubyI6NTMsInRhZyI6InNpZ25hdHVyZSJ9o3NpZ8RAYDYqy5FjCYqANeVJEdwUXqxbux/UBQ8IGX7Tt2X+FiNqv77QEWTpkAmEf2gQ1iSGEWcHYOaJ+w5Sgtqvi8CpCKhzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIDpxII22hQTn9Vfof70u/IKfesYVjxjQRQVgz5s8xj32o3RhZ80CAqd2ZXJzaW9uAQ==
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/shaneck
+
+==================================================================

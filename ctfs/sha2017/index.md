@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: page
 title: CTF Solution Writeups - SHA2017
 category: ctf sha2017
 tags: ctf sha2017

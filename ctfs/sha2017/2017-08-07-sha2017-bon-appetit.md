@@ -33,7 +33,7 @@ So it is not appending any file extension or anything. Good deal. Let’s see wh
 
 
 
-Good deal. Although, it is not clear that this file gets us. Let’s try to view the access logs. Trying to view /var/log/apache2/access.log gives us no results, but remember that comment? Maybe they are doing something different with the access logs. So let’s view the apache config file. Fortunately, they are using the default site config file: [http://bonappetit.stillhackinganyway.nl/?page=php://filter/resource=/etc/apache2/sites-enabled/000-default.conf](http://bonappetit.stillhackinganyway.nl/?page=php://filter/resource=/etc/apache2/sites-enabled/000-default.conf)
+Good deal. Although, it is not clear what this file gets us. Let’s try to view the access logs. Trying to view /var/log/apache2/access.log gives us no results, but remember that comment? Maybe they are doing something different with the access logs. So let’s view the apache config file. Fortunately, they are using the default site config file: [http://bonappetit.stillhackinganyway.nl/?page=php://filter/resource=/etc/apache2/sites-enabled/000-default.conf](http://bonappetit.stillhackinganyway.nl/?page=php://filter/resource=/etc/apache2/sites-enabled/000-default.conf)
 
 {% include image name="bon6.png" %}
 
@@ -55,7 +55,7 @@ So we can see that it is keeping the log for my ip in this file and we can put c
 
 
 
-Yes, so we can do it. It remains to inject some php code into it. Let’s try to get ls to execute. Trying to do this with a browser gets the special characters urlencoded and they don’t interpret, so I will skip ahead and say that you need to use netcat or something similar to get the characters in directly. 
+Yes, so we can do it. It remains to inject some php code into it. Let’s try to get `ls` to execute. Trying to do this with a browser gets the special characters urlencoded and they don’t interpret, so I will skip ahead and say that you need to use netcat or something similar to get the characters in directly. 
 
 {% include image name="bon10.png" %}
 
@@ -77,7 +77,7 @@ And there’s the flag!
 
 So that’s the end. Although it bugged me that we could never see the source for index.php. That was the first file that I thought to view. I tried many other filters and encoding, including [http://bonappetit.stillhackinganyway.nl/?page=php://filter/convert.base64-encode/resource=/var/www/html/index.php](http://bonappetit.stillhackinganyway.nl/?page=php://filter/convert.base64-encode/resource=/var/www/html/index.php) but I never was able to view it. I assume that they were filtering for this filename to force the extra steps.
 
-However, since we can now execute system commands, let’s see if we can see it.
+However, since we can now execute system commands, let’s execute `cat index.php` and see if we can see it.
 
 {% include image name="bon13.png" %}
 

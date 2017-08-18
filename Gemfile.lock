@@ -50,7 +50,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  jekyll (= 3.5.1)
+  jekyll (> 3.5)
   jekyll-feed (~> 0.6)
   jekyll-paginate
   jekyll-theme-midnight

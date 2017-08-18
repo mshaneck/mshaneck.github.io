@@ -67,7 +67,7 @@ int main(){
 ```
 So as you can see, the sequence of system calls are `socket`, `bind`, `listen`, `accept`, `fork`, `waitpid` for the parent, and `dup` and `execve` for the child.
 
-At this point I went into /usr/include/i386-linux-gnu/asm/unistd_32.h to find the syscall numbers, and found that the socket calls did not exist. Also, from looking at other bind shellcodes, I could see that there is one syscall for all the networking functions and the first parameter is the type of socket function that we are requesting. So the next step is to find the numbers for each syscall. We also need to find the values for all the parameters, such as AF_INET and IPPROTO_TCP. So to find all this out, I compiled the c code and stepped through it using gdb and examined the values of the registers before each syscall.
+At this point I went into /usr/include/i386-linux-gnu/asm/unistd_32.h to find the syscall numbers, and found that the socket calls did not exist. Also, from looking at other bind shellcodes, I could see that there is one syscall for all the networking functions, namely `socketcall`, and the first parameter is the type of socket function that we are requesting. So the next step is to find the numbers for each syscall. We also need to find the values for all the parameters, such as AF_INET and IPPROTO_TCP. So to find all this out, I compiled the c code and stepped through it using gdb and examined the values of the registers before each syscall.
 
 First socket. `socket` takes three integer arguments. In order to do this, I first do a `break _start`, then `run`, then `disassemble __socket`.
 

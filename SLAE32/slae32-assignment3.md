@@ -218,7 +218,7 @@ _start:
 	xor ecx,ecx
 	mov cl, 12
 
-	; we don't care what ebx starts at, as it will wrap around
+	; we don't care what edx starts at, as it will wrap around
 	; and eventually hit all memory addresses
 align_page:
 	; align edx to page boundary

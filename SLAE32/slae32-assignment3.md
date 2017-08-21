@@ -6,6 +6,13 @@ title: SLAE32 Assignment 3
 <div class="well" markdown="1">
 <h2>SLAE32 Assignment 3: Egg Hunters</h2>
 
+This blog post has been created for completing the requirements of the SecurityTube Linux Assembly Expert certification:
+
+[http://securitytube-training.com/online-courses/securitytube-linux-assembly-expert/](http://securitytube-training.com/online-courses/securitytube-linux-assembly-expert/)
+
+Student ID: SLAE-1009
+
+Assignment 3 was to research egg hunters and write a proof of concept egg hunter shellcode.
 
 In researching egg hunters I came across [this site](http://www.fuzzysecurity.com/tutorials/expDev/4.html), which then
 directed me to [this paper](http://www.hick.org/code/skape/papers/egghunt-shellcode.pdf), which is more or less the seminal work on egg hunters, and also the best source for Linux egg hunting that I could find.

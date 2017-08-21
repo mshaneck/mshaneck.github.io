@@ -8,3 +8,5 @@ I am taking the SecurityTube Linux Assembly Expert course from SecurityTube. The
 [Assignment 1](./slae32-assignment1)
 
 [Assignment 2](./slae32-assignment2)
+
+[Assignment 3](./slae32-assignment3)

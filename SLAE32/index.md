@@ -12,3 +12,5 @@ I am taking the SecurityTube Linux Assembly Expert course from SecurityTube. The
 [Assignment 3](./slae32-assignment3)
 
 [Assignment 4](./slae32-assignment4)
+
+All code for these writeups is located on my [github page](http://github.com/mshaneck)

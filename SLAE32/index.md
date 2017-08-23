@@ -10,3 +10,5 @@ I am taking the SecurityTube Linux Assembly Expert course from SecurityTube. The
 [Assignment 2](./slae32-assignment2)
 
 [Assignment 3](./slae32-assignment3)
+
+[Assignment 4](./slae32-assignment4)

@@ -558,6 +558,21 @@ salsa20CoreRoundFunction:
 
 So there it is. The next important thing to cover it whether or not it works. So I tested it with a few different shellcodes from previous assignments. First, the helloworld shellcode.
 
+{% include image name="helloworld1.png" width="100%" %}
+{% include image name="helloworld2.png" width="100%" %}
+{% include image name="helloworld3.png" width="100%" %}
+
+The next one I tried was the execve.
+
+{% include image name="execve1.png" width="100%" %}
+{% include image name="execve2.png" width="100%" %}
+{% include image name="execve3.png" width="100%" %}
+
+Finally, the reverse shell.
+
+{% include image name="reverse1.png" width="100%" %}
+{% include image name="reverse2.png" width="100%" %}
+{% include image name="reverse3.png" width="100%" %}
 
 
 <h2>Bonus Learning Experience</h2>

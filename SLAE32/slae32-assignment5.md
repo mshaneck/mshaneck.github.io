@@ -478,4 +478,4 @@ Running it in gdb confirmed the above analysis. It didn't really add anything to
 
 {% include image name="readfile_gdb_pwd.png" width="100%" %}
 
-So there it is. Three payloads from Metasploit analyzed as naseum. :) Frankly, the shellcode from Metasploit is very compact and the way it reuses data and compresses the instructions is quite amazing. It is truly a work of art, in my opinion. I am inspired to look at the Metasploit payload generators to see what it looks like, and how I can add my shellcode and encoders and crypters into metasploit. 
+So there it is. Three payloads from Metasploit analyzed as naseum. :) Frankly, the shellcode from Metasploit is very compact and the way it reuses data and compresses the instructions is quite amazing. It is truly a work of art, in my opinion. I am inspired to look at the Metasploit payload generators to see what it looks like, and how I can add my shellcode and encoders and crypters into metasploit.

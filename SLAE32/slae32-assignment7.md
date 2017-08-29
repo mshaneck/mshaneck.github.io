@@ -502,7 +502,7 @@ salsa20CoreRound:
     call salsa20CoreRoundFunction
     add esp,16
 ```
-Several rounds are omitted here. Please see my github repo for the while file.
+Several rounds are omitted here. Please see my github repo for the entire file.
 ```nasm
     push 18
     push 13

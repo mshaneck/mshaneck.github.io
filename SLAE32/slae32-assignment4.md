@@ -14,7 +14,7 @@ Student ID: SLAE-1009
 
 Assignment 4 calls for a custom encoder. The encoder is simply a mechanism to transform the bytes into a less recognizable form, and couple onto it a decoding stub, that will perform the inverse transformation. In the class, a simple XOR encoder was covered where a single byte was used to xor each individual byte of the shellcode. In a subsequent video, the same technique was shown using xmm registers. I liked the idea of using obscure registers and I also like the simplicity of the xor operation.
 
-However, I wanted to implement something above and beyond what was covered in the course, so I decided to extend the xmm xor technique. In the video, he used a single byte repeated over and over. My idea was to use a 128 bit random value and xor that entire thing with 128 bits of shellcode. Then, in order to prevent exact reuse of the key for each 128 bit block, I decided to rotate the key after each block, so that if there happened to be a repeated shellcode block, it wouldn't be repeated in the encoded version. Since this isn't crypto, it's not that critical, but I thought it might add a bit of difficulty to analysis.
+However, I wanted to implement something above and beyond what was covered in the course, so I decided to extend the xmm xor technique. In the video, he used a single byte repeated over and over. My idea was to use a 128 bit random value and xor the entire thing with 128 bits of shellcode. Then, in order to prevent exact reuse of the key for each 128 bit block, I decided to rotate the key after each block, so that if there happened to be a repeated shellcode block, it wouldn't be repeated in the encoded version. Since this isn't crypto, it's not that critical, but I thought it might add a bit of difficulty to analysis.
 
 Another thing that I wanted to do was create a random key each time the encoder was run and also a random shift value. I also wanted the random 128 bit key to be physically located in the middle of the decoder stub so that it broke up the static decoder stub with a little bit of randomness, so that each static piece was a little shorter.
 
@@ -22,9 +22,9 @@ In order to do all this without going insane cutting and pasting byte strings be
 
 I wrote the encoder in Python 3 and I wrote the decoder in assembly, and pasted the bytes the I needed into the Python encoder script.
 
-Both scripts were a bit tricky to implement, and particularly the proper usage of the xmm registers. But all in all, my main issues were lack of familiarity with the less than common commands, both in Python and asm, that I was less than familiar with. In the end, I was able to get everything working, and I will demonstrate its functionality after I present the code.
+Both scripts were a bit tricky to implement - particularly using the xmm instructions properly. But all in all, my main issues were lack of familiarity with the necessary commands, both in Python and asm. In the end, I was able to get everything working, and I will demonstrate its functionality after I present the code.
 
-I'll present the Python script first, but I'll omit the objdump output that I include as a comment at the bottom, as well as the print statements that I commented out, but left in case someone wants to investigate it further. There are lots of comments in the code to explain what it is doing, but I'll add explanation as needed.
+I'll present the Python script first, but I'll omit the objdump output that I include as a comment at the bottom in the code on [github](http://www.github.com/mshaneck/SLAE32), as well as the print statements that I commented out, but left in case someone wants to investigate it further. There are lots of comments in the code to explain what it is doing, but I'll add explanation as needed.
 
 ```python
 #!/usr/bin/python3
@@ -62,7 +62,7 @@ xorKeyString = ""
 for s in xorKey.to_bytes(16,"little"):
     xorKeyString += "\\x" + '{:02x}'.format(s)
 ```
-I am going to paste these values into the code directly, so I format them so that I can just concatentate them later. I was going to put the shift value right next to the xor key, but the shift instruction for xmm registers takes an immediate value as the amount of bytes to shift, so I have to paste them into the code in the appropriate position, essentially building the instructions on the fly.
+I am going to paste these values into the code directly, so I format them so that I can just concatenate them later. I was going to put the shift value right next to the xor key, but the shift instruction for xmm registers takes an immediate value as the amount of bytes to shift, so I have to paste them into the code in the appropriate position, building the instructions on the fly.
 
 ```python
 # break up input into chunks of 16 bytes
@@ -85,7 +85,7 @@ for s in xorKey.to_bytes(16,"little"):
     currentKey += "\\x" + '{:02x}'.format(s)
 
 ```
-The following part is the construction of the decoder stub plus the encoded shellcode. The byte codes are from the objdump that comes from th eassembly code that will be described next.
+The following part is the construction of the decoder stub plus the encoded shellcode. The byte codes are from the objdump that comes from the assembly code that will be described next.
 ```python
 #So now we have all the important parts
 #So lets construct the entire shellcode, including the decoder and the encoded shellcode

@@ -39,7 +39,7 @@ int main(){
 }
 ```
 
-Running it through gdb as before shows that the socketcall number is 3. This can be confirmed by looking at /usr/include/linux/net.h
+Running it through gdb as before shows that the socketcall number for `connect` is 3. This can be confirmed by looking at /usr/include/linux/net.h
 
 ```
 #define SYS_CONNECT     3               /* sys_connect(2)               */
@@ -136,10 +136,10 @@ Compiling and pasting the shellcode into the shellcode stub resulted in a functi
 
 {% include image name="functional_shellcode.png" width="100%" %}
 
-Total shellcode length was exactly 100 bytes, which was an improvement from my initial straightforward attempt, which was somewhere around 120 bytes. I tried to break the arbitrary 100 byte boundary, but I ran out of way to shorten it any further. I could probably save a few more bytes by placing the ip address and port in the middle of the program and not using the jmp-call-pop technique to get its location, but I wanted to leave that in for ease of configuration.
+Total shellcode length was exactly 100 bytes, which was an improvement from my initial straightforward attempt, which was somewhere around 120 bytes. I tried to break the arbitrary 100 byte boundary, but I ran out of ways to shorten it any further. I could probably save a few more bytes by placing the ip address and port in the middle of the program and not using the jmp-call-pop technique to get its location, but I wanted to leave that in for ease of configuration.
 
 Some of the improvements I made in this shellcode, as compared to assignment 1, aside from extra features, was pushing hardcoded bytes onto the stack directly, instead of loading them into registers and pushing those. The other major improvement I made to save some space was to rearrange the functions. Namely, putting `dup2` just after `socket` allowed for reuse of some registers, as the values were already in them.
 
-One limitation of the shellcode is in the IP address. It is placed at the end and it is not encoded. That means that you cannot put an IP address as the destination that contains a null byte. At least, that is, if you need to avoid null bytes. As you can see in my example, I have two null bytes, since I was connecting to 127.0.0.1. However, I didn't want to add the additional complexity of encoding, plus any sort of simple encoding would require some byte to be disallowed from the IP address. The idea that I had was that you could put an encoding byte just after the IP address, and have the shellcode use that byte to decode the address. That way, it could be configurable, along with the IP, and so you could choose a byte that isn't in the address you were connecting to. Perhaps I'll implement that for bonus points. :)
+One limitation of the shellcode is in the IP address. It is placed at the end and it is not encoded. That means that you cannot put an IP address as the destination that contains a null byte. At least, that is, if you need to avoid null bytes. As you can see in my example, I have two null bytes, since I was connecting to 127.0.0.1. However, I didn't want to add the additional complexity of encoding, plus any sort of simple encoding would require some byte to be disallowed from the IP address. The idea that I had was that you could put an encoding byte just after the IP address, and have the shellcode use that byte to decode the address. That way, it could be configurable, along with the IP, and so you could choose a byte that isn't in the address you were connecting to. 
 
 </div>

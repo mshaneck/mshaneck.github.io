@@ -12,9 +12,7 @@ This blog post has been created for completing the requirements of the SecurityT
 
 Student ID: SLAE-1009
 
-Take three payload samples from msfpayload
-analyze using ndisasm, libemu, gdb
-present analysis
+Assignment 5 requires that I take three payloads from msfvenom and analyze them using ndisasm, libemu, and gdb.
 
 My first thought was to analyze at least one meterpreter shellcode. Alas, they are enormous and I would like to do more with the rest of my life instead of analyzing almost 1MB of shellcode. So instead, I opted for shorter ones. First, I wanted to look at their reverse tcp shellcode. I managed to get mine into 100 bytes, but the Metasploit one is 68 bytes, so I really wanted to see their approach on that one. Second, I wanted to look at their implementation of adduser. For the last one, I had noticed in viewing the payload options that they all had some extra options and one that intrigued me was PrependChrootBreak. I was not sure off the top of my head how they would do that and so I thought that would go well with the read_file shellcode.
 
@@ -213,7 +211,7 @@ unsigned char buf[] =
 "\x69\x6e\x2f\x62\x61\x73\x68\x0a\x59\x8b\x51\xfc\x6a\x04\x58"
 "\xcd\x80\x6a\x01\x58\xcd\x80";
 ```
-Again, first the disassembly.
+Next the disassembly.
 ```nasm
 $ cat add_user_raw | ndisasm -u -
 00000000  31C9              xor ecx,ecx
@@ -420,7 +418,7 @@ It finishes the chroot calls with one final call to chroot with '..' as the argu
 00000038  31C9              xor ecx,ecx
 0000003A  CD80              int 0x80
 ```
-Now it jumps to 0x68, which is located at the end of the shellcode. This is part of the jump-call-pop. This jump goes directly to a call, which calls back to the line just after the jmp. The data at the end is simply the file path that we are trying to read. The address of this file path is put into ebx, ecx is set to 0, and eax is set to 0x5, which is for syscall 5, which is open.
+Now it jumps to 0x68, which is located at the end of the shellcode. This is part of the jump-call-pop. This jump goes directly to a call, which calls back to the line just after the jmp. The data at the end is simply the file path that we are trying to read. The address of this file path is popped into ebx, ecx is set to 0, and eax is set to 0x5, which is for syscall 5, which is open.
 ```
 #define __NR_open 5
 ```
@@ -439,7 +437,7 @@ Next, it moves the file descriptor into ebx, puts 3 into eax (for syscall 3 whic
 ```
 #define __NR_read 3
 ```
-It moves the stack pointer into ecx (by way of edi) and puts 0x1000 iunto edx for the length. So it will read at most 0x1000 bytes onto the stack at the current stack position.
+It moves the stack pointer into ecx (by way of edi) and puts 0x1000 into edx for the length. So it will read at most 0x1000 bytes onto the stack at the current stack position.
 
 ```nasm
 0000004E  89C2              mov edx,eax
@@ -447,7 +445,7 @@ It moves the stack pointer into ecx (by way of edi) and puts 0x1000 iunto edx fo
 00000055  BB01000000        mov ebx,0x1
 0000005A  CD80              int 0x80
 ```
-Next it calls syscall 4 (write). ebx is set to 1, which means it will write to STDOUT. ecx is still get to the stack pointer, where the data was read. edx is set to what eax was after the read call finished, which is the number of bytes read. So it will write the contents of the file (however much it read) to STDOUT.
+Next it calls syscall 4 (write). ebx is set to 1, which means it will write to STDOUT. ecx is still set to the stack pointer, where the data was read. edx is set to what eax was after the read call finished, which is the number of bytes read. So it will write the contents of the file (however much it read) to STDOUT.
 
 ```nasm
 0000005C  B801000000        mov eax,0x1
@@ -478,4 +476,4 @@ Running it in gdb confirmed the above analysis. It didn't really add anything to
 
 {% include image name="readfile_gdb_pwd.png" width="100%" %}
 
-So there it is. Three payloads from Metasploit analyzed as naseum. :) Frankly, the shellcode from Metasploit is very compact and the way it reuses data and compresses the instructions is quite amazing. It is truly a work of art, in my opinion. I am inspired to look at the Metasploit payload generators to see what it looks like, and how I can add my shellcode and encoders and crypters into metasploit.
+So there it is. Three payloads from Metasploit analyzed completely. Frankly, the shellcode from Metasploit is very compact and the way it reuses data and compresses the instructions is quite amazing. It is truly a work of art, in my opinion. I am inspired to look at the Metasploit payload generators to see what they look like, and how I can add my shellcode and encoders and crypters into metasploit.

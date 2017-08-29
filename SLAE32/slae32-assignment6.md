@@ -91,7 +91,7 @@ _load_data:
 ```
 One of the main differences that I introduced was to put all of the data at the end, and just use the offset of 11 to reference the second part. I also made some assumptions about the success of previous calls. I figured those were valid assumptions, as if they didn't succeed, the shellcode wouldn't work anyway.
 
-One interesting thing I learned from this is that operations are smaller when working with eax as opposed to edx. So for example, I shaved one byte off by exchanges eax and edx first and then subtracting from eax.
+One interesting thing I learned from this is that operations are smaller when working with eax as opposed to edx. So for example, I shaved one byte off by exchanging eax and edx first and then subtracting from eax.
 
 Most importantly, I was able to reduce the overall size of the code from 77 bytes to 76 bytes!
 

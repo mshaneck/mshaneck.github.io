@@ -17,9 +17,9 @@ Assignment 3 was to research egg hunters and write a proof of concept egg hunter
 In researching egg hunters I came across [this site](http://www.fuzzysecurity.com/tutorials/expDev/4.html), which then
 directed me to [this paper](http://www.hick.org/code/skape/papers/egghunt-shellcode.pdf), which is more or less the seminal work on egg hunters, and also the best source for Linux egg hunting that I could find.
 
-Egg hunters in reality are actually very simple. The premise is that sometimes we don't have room to place the entire payload where the exploit gives us access. Perhaps there is some prior processing that shortens the code, or perhaps longer shellcode will crash the program before the corrupted `eip` is used. However, it may be the case that a larger space can be allocated somewhere else. For example, you could place the payload in an environment variable, or it might be a command line argument, both of which are accessible in memory. Or it might be the case, as was described in the paper, that the shellcode can be inserted into some structure or object that gets loaded elsewhere, like an HTML page.
+Egg hunters in reality are actually very simple. The premise is that sometimes we don't have room to place the entire payload where the exploit gives us access. Perhaps there is some prior processing that shortens the code, or perhaps longer shellcode will crash the program before the corrupted `eip` is used. However, it may be the case that a larger space can be allocated somewhere else. For example, you could place the payload in an environment variable, or it might be a command line argument, both of which are accessible in memory. Or it might be the case, as was described in the paper, that the shellcode can be inserted into some structure or object that gets loaded elsewhere, like an HTML page stored in the heap.
 
-In short, an egg hunter is a small stub of shellcode that simply loops through memory to see if it contains the "egg" (a unique but short sequence of bytes) that is placed at the beginning of the shell code. If it does, then it transfers control there. If it does not, then it moves on to the next word in memory. In this manner, it will scan the entire memory contents (or whatever subsection you know the payload to be in) and will find the egg and jump to it there,
+In short, an egg hunter is a small stub of shellcode that simply loops through memory to see if it contains the "egg" (a unique but short sequence of bytes) that is placed at the beginning of the shell code. If it does, then it transfers control there. If it does not, then it moves on to the next word in memory. In this manner, it will scan the entire memory contents (or whatever segment you know the payload to be in) and will find the egg and jump to it there,
 
 Since the egg might be located anywhere in memory, a truly complete egg hunter will be forced to examine segments of memory for which it does not have read permissions and so accessing it would cause a Segmentation Violation, which will crash the program. Not a desirable outcome when you are trying to get your shellcode to execute.
 
@@ -32,14 +32,14 @@ Another point that he mentioned is that it is often a good idea to make sure you
   inc edi
   push ebx
 ```
-This amused me to no end...
+Which I think is a great value for the egg...
 
 At this point skape presents three egg hunters and their analysis. They relied on abusing system calls to determine access to memory, namely `access` and `sigaction`. They are both small and fast, ranging from 30 to 39 bytes and able to scan memory in 2.5-8 seconds. The most interesting point from these shellcodes is how they detect invalid memory. It turns out that if you make a system call that takes a string pointer, and if the string pointer is an invalid memory address, the program does not crash, but the syscall returns an error code unique to this  situation. So if you call the syscall with various addresses, specifically sequential addresses throughout the memory space, you can tell if the memory address is valid or not. If it is not, just loop around and increment the address. Otherwise, you can go ahead and dereference the memory location and see if the egg is present.
 
 
 <h2>My Egg Hunter Shellcode: Research</h2>
 
-So that will be my target - to try to get as close to that as possible. I took a quick look at some x86 egg hunters on exploit-db. Most of them seemed to skip requiremnent 1 from above, and assumed that the search started in the same memory segment. As such, some were much smaller, as little as 13 bytes. I plan to opt for the larger, more robust version. Another point that many other egghunters shared was to modify the egg before looking for it, so that it won't find itself, and thus allow for a single copy of the 4 byte egg, instead of requiring it to be repeated twice.
+So that will be my target - to try to get as close to that as possible. I took a quick look at some x86 egg hunters on exploit-db. Most of them seemed to skip requirement 1 from above, and assumed that the search started in the same memory segment. As such, some were much smaller, as little as 13 bytes. I plan to opt for the larger, more robust version. Another point that many other egghunters shared was to modify the egg before looking for it, so that it won't find itself, and thus allow for a single copy of the 4 byte egg, instead of requiring it to be repeated twice.
 
 For the egg hunters that I saw, they used access and sigaction. I opted to look for a different syscall. The main reason to do this is to expand on the varieties of egg hunter shellcode in existence. Also, since all the syscalls have the potential for side effects, it is good to explore different options to evaluate the various possibilities. The two that I looked at were:
 
@@ -122,7 +122,7 @@ bad file: 0xfffffffe
 good directory: 0
 ```
 
-So it looks like both would suffice for our purposes. In comparing the two, it appears that `chdir` wpold have fewer chances for side effects, in that if it were to find a valid memory address that pointed to a valid directory, it would simply change the working directory to that directory. As a result, the payload that we would be running as our main payload would simply not be able to use relative paths, since we are not sure what directory we might end up in.
+So it looks like both would suffice for our purposes. In comparing the two, it appears that `chdir` would have fewer chances for side effects, in that if it were to find a valid memory address that pointed to a valid directory, it would simply change the working directory to that directory. As a result, the payload that we would be running as our main payload would simply not be able to use relative paths, since we are not sure what directory we might end up in.
 
 For open, if it found valid memory addresses that pointed to valid files that the program could open, it would open it and reduce the number of possible file descriptors left. So in theory, this egg hunter could exhaust the possible number of open file descriptors preventing the main payload from opening a file. I was curious what this limit would be, but I didn't want to spend a lot of time looking, so I just wrote this program to test, and verified that the limit is 1024 open file descriptors, at least on my x86 Linux system. Perhaps the limit is greater on 64 bit machines. In any case, it seems very unlikely that this limit would be reached.
 
@@ -286,7 +286,7 @@ You can also test how long it takes to find the egg with the time command.
 
 {% include image name="eggtimer.png" width="100%" %}
 
-So overall, I think I met the goals set out in the beginning. It is 33 bytes, so better than the two `access` based egg hunters presented by skape. It takes just under 3 seconds, but since skape's paper was published in 2004, I'm not sure how much that comparison is worth, but it is close to the faster `sigaction` based egg hunters and much faster than the `access` based ones.
+So overall, I think I met the goals set out in the beginning. It is 33 bytes, so shorter than the two `access` based egg hunters presented by skape. It takes just under 3 seconds, but since skape's paper was published in 2004, I'm not sure how much that comparison is worth, but it is closer to the faster `sigaction` based egg hunters and much faster than the `access` based ones.
 
 I also used my assignment 1 and 2 shell code as a test as well.
 

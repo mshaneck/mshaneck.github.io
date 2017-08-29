@@ -18,9 +18,9 @@ I took a look at some of the other Assignment 7s out there, since they are requi
 
 Disclaimer: I implemented the encryption code myself, which means that you should never take this code and use it in anything remotely close to something even resembling a production environment. This was for my own education. Feel free to play with the code, but if you want real code to use, just use the libraries. Of course, if you are using it to encrypt shellcode, the lack of rigorous cryptographic security proofs is probably not all that big of a deal.
 
-Also note that the key will be included in the decryption shellcode. You could change that to read the key in from a file that was planted through some other means or by constructing the key some other way to slow down or possibly thwart analysis. Since this code includes it in the decryption stub, it may possibly delay analysis, but it will definitely not prevent it...
+Also note that the key will be included in the decryption shellcode. You could change that to read the key in from a file that was planted through some other means or by constructing the key some other way to slow down or possibly thwart analysis. Since this code includes it in the decryption stub, it may possibly delay analysis, but it will definitely not prevent it.
 
-So the stream cipher that I chose was Salsa20. It seemed like a fairly simple algorithm, and since I was going to implement it in assembly, I wanted to use a simple algorithm.  I used the main author's (Daniel Bernstein) [implementation](https://cr.yp.to/snuffle.html) as reference, and for the Python version, simply ported his C code into Python, then adapted it to my particular use case.
+The stream cipher that I chose was Salsa20. It seemed like a fairly simple algorithm, and since I was going to implement it in assembly, I wanted to use a simple algorithm.  I used the main author's (Daniel Bernstein) [implementation](https://cr.yp.to/snuffle.html) as reference, and for the Python version, simply ported his C code into Python, then adapted it to my particular use case.
 
 For the assembly version, I took the Python version and reimplemented each function in assembly. It was definitely the hardest and most intricate assembly that I have written for this certification, and therefore it was the right choice to implement Salsa20 in assembly. It took a while to get it functioning properly. I also gave up pretty early trying to keep out nulls, so to use this in a string based exploit, you would want to reencode it with the xor encoder from A4 or something similar.
 
@@ -502,7 +502,7 @@ salsa20CoreRound:
     call salsa20CoreRoundFunction
     add esp,16
 ```
-Several rounds are omitted here. Please see my github repo for the entire file.
+Several steps are omitted here. Please see my github repo for the entire file.
 ```nasm
     push 18
     push 13
@@ -582,9 +582,9 @@ However, I was storing the length of the message just in front of the encrypted 
 
 This turned out to be a very hard bug for me to figure out. Everything seemed to be fine, it just wasn't decrypting. I was checking the round key before and after each round and it matched up exactly with what the python code was printing. I finally dug into where it xor'd all the bytes together and examined the ciphertext and the key. It was then that I finally realized that the ciphertext had the first few bytes correct, and then it started over. That is, about 6 bytes in, it repeated the ciphertext from the beginning. I checked it out in objdump and sure enough, it was repeated. But it was not that way in the source asm file. The only thing I could figure was that the byte 0x65 was a full instruction, so it was happy with that. However 0x65,0x00 was not a full instruction, so it repeated bytes over in order to complete instructions.
 
-Does anyone know why it does that? Is there anyway to turn it off? I realize that what we are doing here is an obscure use and not really the supported way that it is supposed to work. You really aren't supposed to store data in and among instructions in the text section. In fact, the regular executable doesn't even run, since we are editing (or attempting to write to) data in the .text section. I suppose it is an unsupported way of coding in assembly and thus is has unpredictable behavior. If anyone has any insight, please let me know and I will post an update.
+Does anyone know why it does that? Is there anyway to turn it off? I realize that what we are doing here is an obscure use and not really the supported way that assemblers are supposed to work. You really aren't supposed to store data in and among instructions in the text section. In fact, the regular executable doesn't even run, since we are editing (or attempting to write to) data in the .text section. I suppose that since it is an unsupported way of coding in assembly it has unpredictable behavior. If anyone has any insight, please let me know and I will post an update.
 
-My solution to this problem was to hardcode the length, as I am dynamically generating the code anyway, so I can just paste it in. Also, I didn't realize that this was going on, but I had noticed some symptoms of this issue with the other code, as I had to put nops after the data, as I had noticed that it was jumping into garbage instructions in and around the data. By adding nops, even if the offsets were wrong by a few bytes, it would jump into the nop sled instead of the data. Kind of a hackish way of dealing with it, but hey, that seems appropriate for shellcode, right?
+My solution to this problem was to hardcode the length, as I am dynamically generating the code anyway, so I can just paste it in. Also, I didn't realize that this was going on, but I had noticed some symptoms of this issue with the other code. You may notice a bunch of nops in certain places near the various places where data is stored. I had noticed that it was jumping into garbage instructions in and around the data, and by adding nops, even if the offsets were wrong by a few bytes, it would jump into the nop sled instead of the data. Kind of a hackish way of dealing with it, but hey, that seems appropriate for shellcode, right?
 
 
 

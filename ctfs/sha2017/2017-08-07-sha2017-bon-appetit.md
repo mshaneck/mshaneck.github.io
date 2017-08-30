@@ -3,21 +3,22 @@ layout: page
 title: CTF Solution Writeups - SHA2017 - Bon Appétit (Web 100)
 category: ctf sha2017
 tags: ctf sha2017
+comments: true
 ---
 
 [SHA2017](https://ctf.sha2017.org/home) - Bon Appétit (Web 100)
 ------
-The challenge starts with a link to a webpage for a restaurant. 
+The challenge starts with a link to a webpage for a restaurant.
 
 {% include image name="bon1.png" width="75%" %}
 
 First thing to do is view the source. One thing that is immediately apparent is the comment near the top of the page:
 
-{% include image name="bon2.png" width="75%" %} 
+{% include image name="bon2.png" width="75%" %}
 
 So we will need to look at access or error logs, if possible. Keep that in mind for later. Browsing around the website, it becomes apparent that there is one main page that is being used to load the individual content pages. This is evident by the url. For example to see the contact page, you load [http://bonappetit.stillhackinganyway.nl/?page=contact](http://bonappetit.stillhackinganyway.nl/?page=contact)
 
-{% include image name="bon3.png" width="50%" %} 
+{% include image name="bon3.png" width="50%" %}
 
 
 You can verify that it is loading that page directly by just browsing to that page:
@@ -26,7 +27,7 @@ You can verify that it is loading that page directly by just browsing to that pa
 
 
 
-So it is not appending any file extension or anything. Good deal. Let’s see what sorts of files we can access. Browsing directly to [http://bonappetit.stillhackinganyway.nl/?page=/etc/passwd](http://bonappetit.stillhackinganyway.nl/?page=/etc/passwd) returns nothing. Let’s try a php filter: [http://bonappetit.stillhackinganyway.nl/?page=php://filter/resource=/etc/passwd](http://bonappetit.stillhackinganyway.nl/?page=php://filter/resource=/etc/passwd) 
+So it is not appending any file extension or anything. Good deal. Let’s see what sorts of files we can access. Browsing directly to [http://bonappetit.stillhackinganyway.nl/?page=/etc/passwd](http://bonappetit.stillhackinganyway.nl/?page=/etc/passwd) returns nothing. Let’s try a php filter: [http://bonappetit.stillhackinganyway.nl/?page=php://filter/resource=/etc/passwd](http://bonappetit.stillhackinganyway.nl/?page=php://filter/resource=/etc/passwd)
 
 {% include image name="bon5.png" %}
 
@@ -50,12 +51,12 @@ We can see from here that they are using a custom log handler script and that sc
 Ok, so it is keeping individual logs per client in the log directory. Let’s take a look.
 {% include image name="bon8.png" %}
 
-So we can see that it is keeping the log for my ip in this file and we can put content into that file, simply by requesting for various strings. So we can control some content that we can place on the site. But can we get it to execute? To get it to execute, what we would need to do is put php content into it and request it through the php interpreter. The file is a .log file, so it won’t execute, but as we saw in the beginning, the index.php file allows us to include files with no extensions. So let’s include this file. 
+So we can see that it is keeping the log for my ip in this file and we can put content into that file, simply by requesting for various strings. So we can control some content that we can place on the site. But can we get it to execute? To get it to execute, what we would need to do is put php content into it and request it through the php interpreter. The file is a .log file, so it won’t execute, but as we saw in the beginning, the index.php file allows us to include files with no extensions. So let’s include this file.
 {% include image name="bon9.png" %}
 
 
 
-Yes, so we can do it. It remains to inject some php code into it. Let’s try to get `ls` to execute. Trying to do this with a browser gets the special characters urlencoded and they don’t interpret, so I will skip ahead and say that you need to use netcat or something similar to get the characters in directly. 
+Yes, so we can do it. It remains to inject some php code into it. Let’s try to get `ls` to execute. Trying to do this with a browser gets the special characters urlencoded and they don’t interpret, so I will skip ahead and say that you need to use netcat or something similar to get the characters in directly.
 
 {% include image name="bon10.png" %}
 
@@ -82,5 +83,3 @@ However, since we can now execute system commands, let’s execute `cat index.ph
 {% include image name="bon13.png" %}
 
 Success! And that explains why we could not see the index.php file. All in all, a fun challenge!
-
-

@@ -1,6 +1,7 @@
 ---
 layout: page
 title: SLAE32 Assignment 3
+comments: true
 ---
 
 <div class="well" markdown="1">
